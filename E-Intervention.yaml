@@ -1,0 +1,479 @@
+swagger: "2.0"
+info:
+  description: "Spécification des ressources qui devront être exposées par les différents acteurs impliqués par le protocole E-Intervention."
+  version: "1.0.0"
+  title: "E-Intervention"
+host: "serverRoot"
+basePath: "/v1"
+tags:
+- name: "client"
+  description: "Opérations sur les clients"
+- name: "intervention"
+  description: "Opérations sur les interventions"
+schemes:
+- "https"
+paths:
+  /clientHS_OC:
+    post:
+      tags:
+      - "client"
+      summary: "Flux 3 - Flux de déclaration des lignes impactées des OC vers l’OI (facultatif)"
+      description: "Opération permettant à l'opérateur commercial de déclarer des clients HS auprès de l'OI"
+      operationId: "notifierClientsHS_OC"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Liste des clients coupés lors d'une intervention donnée pour un opérateur commercial donné"
+        required: true
+        schema:
+          $ref: "#/definitions/clientHS_OCParInter"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "403":
+          description: "Forbidden"
+        "404":
+          description: "ID Intervention non trouvée"
+        "405":
+          description: "Validation exception"
+        "500":
+          description: "Internal Server Error"
+      security:
+      - api_auth:
+        - "write:clients"
+        - "read:clients"
+  /intervention_DO:
+    post:
+      tags:
+      - "intervention"
+      summary: "Flux 1 - Flux de déclaration d’intervention du DO vers l’OI"
+      description: "Opération permettant au DO de créer une intervention chez l’OI"
+      operationId: "declarerInterventionDO"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objet intervention à déclarer chez l'OI"
+        required: true
+        schema:
+          $ref: "#/definitions/interventionDO"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "403":
+          description: "Forbidden"
+        "405":
+          description: "Validation exception"
+        "500":
+          description: "Internal Server Error"
+      security:
+      - api_auth:
+        - "write:interventions"
+        - "read:interventions"
+    put:
+      tags:
+      - "intervention"
+      summary: "Flux 1 - Flux de mise à jour d’intervention du DO vers l’OI"
+      description: "Opération permettant au DO de mettre à jour une intervention chez l’OI"
+      operationId: "majInterventionDO"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objet intervention à déclarer chez l'OI"
+        required: true
+        schema:
+          $ref: "#/definitions/interventionDO"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "403":
+          description: "Forbidden"
+        "404":
+          description: "Intervention non trouvée"
+        "405":
+          description: "Validation exception"
+        "500":
+          description: "Internal Server Error"
+      security:
+      - api_auth:
+        - "write:interventions"
+        - "read:interventions"
+  /intervention_DO/{refIntervDO}:
+    get:
+      tags:
+      - "intervention"
+      summary: "Trouver une intervention DO par identifiant (à discuter en comité)"
+      description: "Retourne une intervention dans le système du DO"
+      operationId: "getInterventionDOParID"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "refIntervDO"
+        in: "path"
+        description: "Identifiant de l'intervention"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/interventionDO"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Intervention non trouvée"
+      security:
+      - api_auth: []
+  /intervention_DO/findByDate:
+    get:
+      tags:
+      - "intervention"
+      summary: "Trouver des interventions DO par date (à discuter en comité)"
+      description: "Retourne un tableau d'interventions issues du système du DO"
+      operationId: "getInterventionsDOParDate"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "debutInter"
+        in: "query"
+        description: "Date de début d'intervention"
+        required: true
+        type: "string"
+        format: "date"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/tabInterventionsDO"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Aucune intervention trouvée"
+      security:
+      - api_auth: []
+  /intervention_OI/{refIntervOI}:
+    get:
+      tags:
+      - "intervention"
+      summary: "Trouver une intervention OI par identifiant (à discuter en comité)"
+      description: "Retourne une intervention dans le système de l'OI"
+      operationId: "getInterventionOIParID"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "refIntervOI"
+        in: "path"
+        description: "Identifiant de l'intervention"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/interventionOI"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Intervention non trouvée"
+      security:
+      - api_auth: []
+  /intervention_OI/findByDate:
+    get:
+      tags:
+      - "intervention"
+      summary: "Trouver des interventions OI par date (à discuter en comité)"
+      description: "Retourne un tableau d'interventions issues du système de l'OI"
+      operationId: "getInterventionsOIParDate"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "debutInter"
+        in: "query"
+        description: "Date de début d'intervention"
+        required: true
+        type: "string"
+        format: "date"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/tabInterventionsOI"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Aucune intervention trouvée"
+      security:
+      - api_auth: []
+  /intervention_OI:
+    post:
+      tags:
+      - "intervention"
+      summary: "Flux 2 - Flux de déclaration d’intervention de l’OI vers les OC présents sur le PM"
+      description: "Opération permettant à l'OI de créer une intervention chez l’OC"
+      operationId: "declarerInterventionOI"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objet intervention à déclarer chez l'OC"
+        required: true
+        schema:
+          $ref: "#/definitions/interventionOI"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "403":
+          description: "Forbidden"
+        "405":
+          description: "Validation exception"
+        "500":
+          description: "Internal Server Error"
+      security:
+      - api_auth:
+        - "write:interventions"
+        - "read:interventions"
+    put:
+      tags:
+      - "intervention"
+      summary: "Flux 2 - Flux de mise à jour d’intervention de l’OI vers les OC présents sur le PM"
+      description: "Opération permettant à l'OI de mettre à jour une intervention chez l’OC"
+      operationId: "majInterventionOI"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objet intervention à déclarer chez l'OC"
+        required: true
+        schema:
+          $ref: "#/definitions/interventionOI"
+      responses:
+        "200":
+          description: "Successful operation"
+        "400":
+          description: "Bad request"
+        "401":
+          description: "Unauthorized"
+        "403":
+          description: "Forbidden"
+        "404":
+          description: "Intervention non trouvée"
+        "405":
+          description: "Validation exception"
+        "500":
+          description: "Internal Server Error"
+      security:
+      - api_auth:
+        - "write:interventions"
+        - "read:interventions"
+
+securityDefinitions:
+  api_auth:
+    type: "oauth2"
+    authorizationUrl: "http://serverRoot/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:clients: "modifier ses clients"
+      read:clients: "lire ses clients"
+      write:interventions: "modifier ses interventions"
+      read:interventions: "lire ses interventions"
+definitions:
+  clientHS_OCParInter:
+    type: "object"
+    required:
+    - "codeOC"
+    - "refIntervOI"
+    - "tabClientHS"
+    properties:
+      codeOC:
+        type: "string"
+        maxLength: 4
+      refIntervOI:
+        type: "string"
+        maxLength: 50
+      tabClientHS:
+        type: "array"
+        items:
+          $ref: "#/definitions/clientHSOC"
+    xml:
+      name: "clientHS_OCParInter"
+  clientHSOC:
+    type: "object"
+    required:
+    - "PTO"
+    - "PBO"
+    - "tube"
+    - "fibre"
+    - "positionPM_ModuleOI"
+    properties:
+      PTO:
+        type: "string"
+        maxLength: 50
+      PBO:
+        type: "string"
+        maxLength: 50
+      tube:
+        type: "string"
+        maxLength: 50
+      fibre:
+        type: "string"
+        maxLength: 50
+      positionPM_ModuleOI:
+        type: "string"
+        maxLength: 100
+    xml:
+      name: "clientHSOC"
+  interventionDO:
+    type: "object"
+    required:
+    - "codeDO"
+    - "codeOI"
+    - "refIntervDO"
+    - "PM"
+    - "tabNaturePBOPTO"
+    - "debutInter"
+    properties:
+      codeDO:
+        type: "string"
+        maxLength: 4
+      codeOI:
+        type: "string"
+        maxLength: 4
+      refIntervDO:
+        type: "string"
+        maxLength: 50
+      PM:
+        type: "string"
+        maxLength: 50
+      tabNaturePBOPTO:
+        type: "array"
+        items:
+          $ref: "#/definitions/naturePBOPTO"
+      debutInter:
+        type: "string"
+        format: "date-time"
+      finInter:
+        type: "string"
+        format: "date-time"
+    xml:
+      name: "interventionDO"
+  interventionOI:
+    type: "object"
+    required:
+    - "codeOI"
+    - "refIntervOI"
+    - "PM"
+    - "debutInter"
+    properties:
+      codeOI:
+        type: "string"
+        maxLength: 4
+      refIntervOI:
+        type: "string"
+        maxLength: 50
+      PM:
+        type: "string"
+        maxLength: 50
+      tabPBO:
+        type: "array"
+        items:
+          $ref: "#/definitions/PBO"
+      debutInter:
+        type: "string"
+        format: "date-time"
+      finInter:
+        type: "string"
+        format: "date-time"
+    xml:
+      name: "interventionOI"
+  naturePBOPTO:
+    type: "object"
+    required:
+    - "nature"
+    properties:
+      nature:
+        type: "integer"
+        format: "int32"
+      PBO:
+        type: "string"
+        maxLength: 50
+      PTO:
+        type: "string"
+        maxLength: 50
+    xml:
+      name: "naturePBOPTO"
+  PBO:
+    type: "object"
+    properties:
+      PBO:
+        type: "string"
+        maxLength: 50
+    xml:
+      name: "PBO"
+  tabInterventionsDO:
+    type: "object"
+    properties:
+      tabInterventionsOI:
+        type: "array"
+        items:
+          $ref: "#/definitions/interventionDO"
+    xml:
+      name: "tabInterventionsOI"
+  tabInterventionsOI:
+    type: "object"
+    properties:
+      tabInterventionsOI:
+        type: "array"
+        items:
+          $ref: "#/definitions/interventionOI"
+    xml:
+      name: "tabInterventionsOI"
+externalDocs:
+  description: "Groupe Interop'Fibre"
+  url: "https://www.interop-fibre.fr/"
