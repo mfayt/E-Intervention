@@ -52,6 +52,33 @@ paths:
       - api_auth:
         - "write:clients"
         - "read:clients"
+  /clientHS_OC/{refIntervOI}:
+    get:
+      tags:
+      - "client"
+      summary: "Trouver les clients HS par intervention OI (à discuter en comité)"
+      description: "Retourne un tableau de clients HS dans le système de l'OC"
+      operationId: "getClientsHSParID"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "refIntervOI"
+        in: "path"
+        description: "Identifiant de l'intervention"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/clientHS_OCParInter"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Intervention non trouvée"
+      security:
+      - api_auth: []
   /intervention_DO:
     post:
       tags:
