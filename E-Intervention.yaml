@@ -79,6 +79,33 @@ paths:
           description: "Intervention non trouvée"
       security:
       - api_auth: []
+  /clientHS_OC/findByDate:
+    get:
+      tags:
+      - "client"
+      summary: "Trouver les clients HS pour toutes les intervention OI d'une date (à discuter en comité)"
+      description: "Retourne un tableau de réponses OC avec les clients HS, dans le système de l'OC"
+      operationId: "getClientsHSParDate"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "debutInter"
+        in: "query"
+        description: "Date de l'intervention"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/tabclientHS_OC"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Intervention non trouvée"
+      security:
+      - api_auth: []
   /intervention_DO:
     post:
       tags:
@@ -483,6 +510,15 @@ definitions:
         maxLength: 50
     xml:
       name: "PBO"
+  tabclientHS_OC:
+    type: "object"
+    properties:
+      tabInterventionsOI:
+        type: "array"
+        items:
+          $ref: "#/definitions/clientHS_OCParInter"
+    xml:
+      name: "tabclientHS_OC"
   tabInterventionsDO:
     type: "object"
     properties:
