@@ -10,11 +10,11 @@
   "tags": [
     {
       "name": "client",
-      "description": "Opérations sur les clients"
+      "description": "Opérations liées aux clients"
     },
     {
       "name": "intervention",
-      "description": "Opérations sur les interventions"
+      "description": "Opérations liées aux interventions"
     }
   ],
   "schemes": [
@@ -62,7 +62,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "ID Intervention non trouvée"
+            "description": "Référence refIntervOI inconnue"
           },
           "405": {
             "description": "Validation exception"
@@ -74,93 +74,8 @@
         "security": [
           {
             "api_auth": [
-              "write:clients",
-              "read:clients"
+              "write:clients"
             ]
-          }
-        ]
-      }
-    },
-    "/clientHS_OC/{refIntervOI}": {
-      "get": {
-        "tags": [
-          "client"
-        ],
-        "summary": "Trouver les clients HS par intervention OI (à discuter en comité)",
-        "description": "Retourne un tableau de clients HS dans le système de l'OC",
-        "operationId": "getClientsHSParID",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "refIntervOI",
-            "in": "path",
-            "description": "Identifiant de l'intervention",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "schema": {
-              "$ref": "#/definitions/clientHS_OCParInter"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Intervention non trouvée"
-          }
-        },
-        "security": [
-          {
-            "api_auth": []
-          }
-        ]
-      }
-    },
-    "/clientHS_OC/findByDate": {
-      "get": {
-        "tags": [
-          "client"
-        ],
-        "summary": "Trouver les clients HS pour toutes les intervention OI d'une date (à discuter en comité)",
-        "description": "Retourne un tableau de réponses OC avec les clients HS, dans le système de l'OC",
-        "operationId": "getClientsHSParDate",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "debutInter",
-            "in": "query",
-            "description": "Date de l'intervention",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "schema": {
-              "$ref": "#/definitions/tabclientHS_OC"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Intervention non trouvée"
-          }
-        },
-        "security": [
-          {
-            "api_auth": []
           }
         ]
       }
@@ -171,16 +86,12 @@
           "intervention"
         ],
         "summary": "Flux 1 - Flux de déclaration d’intervention du DO vers l’OI",
-        "description": "Opération permettant au DO de créer une intervention chez l’OI",
+        "description": "Opération permettant au DO de créer et mettre à jour une intervention chez l’OI",
         "operationId": "declarerInterventionDO",
         "consumes": [
           "application/json",
           "application/xml"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -215,237 +126,8 @@
         "security": [
           {
             "api_auth": [
-              "write:interventions",
-              "read:interventions"
+              "write:interventions"
             ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "intervention"
-        ],
-        "summary": "Flux 1 - Flux de mise à jour d’intervention du DO vers l’OI",
-        "description": "Opération permettant au DO de mettre à jour une intervention chez l’OI",
-        "operationId": "majInterventionDO",
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Objet intervention à déclarer chez l'OI",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/interventionDO"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation"
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Intervention non trouvée"
-          },
-          "405": {
-            "description": "Validation exception"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "api_auth": [
-              "write:interventions",
-              "read:interventions"
-            ]
-          }
-        ]
-      }
-    },
-    "/intervention_DO/{refIntervDO}": {
-      "get": {
-        "tags": [
-          "intervention"
-        ],
-        "summary": "Trouver une intervention DO par identifiant (à discuter en comité)",
-        "description": "Retourne une intervention dans le système du DO",
-        "operationId": "getInterventionDOParID",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "refIntervDO",
-            "in": "path",
-            "description": "Identifiant de l'intervention",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "schema": {
-              "$ref": "#/definitions/interventionDO"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Intervention non trouvée"
-          }
-        },
-        "security": [
-          {
-            "api_auth": []
-          }
-        ]
-      }
-    },
-    "/intervention_DO/findByDate": {
-      "get": {
-        "tags": [
-          "intervention"
-        ],
-        "summary": "Trouver des interventions DO par date (à discuter en comité)",
-        "description": "Retourne un tableau d'interventions issues du système du DO",
-        "operationId": "getInterventionsDOParDate",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "debutInter",
-            "in": "query",
-            "description": "Date de début d'intervention",
-            "required": true,
-            "type": "string",
-            "format": "date"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "schema": {
-              "$ref": "#/definitions/tabInterventionsDO"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Aucune intervention trouvée"
-          }
-        },
-        "security": [
-          {
-            "api_auth": []
-          }
-        ]
-      }
-    },
-    "/intervention_OI/{refIntervOI}": {
-      "get": {
-        "tags": [
-          "intervention"
-        ],
-        "summary": "Trouver une intervention OI par identifiant (à discuter en comité)",
-        "description": "Retourne une intervention dans le système de l'OI",
-        "operationId": "getInterventionOIParID",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "refIntervOI",
-            "in": "path",
-            "description": "Identifiant de l'intervention",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "schema": {
-              "$ref": "#/definitions/interventionOI"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Intervention non trouvée"
-          }
-        },
-        "security": [
-          {
-            "api_auth": []
-          }
-        ]
-      }
-    },
-    "/intervention_OI/findByDate": {
-      "get": {
-        "tags": [
-          "intervention"
-        ],
-        "summary": "Trouver des interventions OI par date (à discuter en comité)",
-        "description": "Retourne un tableau d'interventions issues du système de l'OI",
-        "operationId": "getInterventionsOIParDate",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "debutInter",
-            "in": "query",
-            "description": "Date de début d'intervention",
-            "required": true,
-            "type": "string",
-            "format": "date"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "schema": {
-              "$ref": "#/definitions/tabInterventionsOI"
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Aucune intervention trouvée"
-          }
-        },
-        "security": [
-          {
-            "api_auth": []
           }
         ]
       }
@@ -456,7 +138,7 @@
           "intervention"
         ],
         "summary": "Flux 2 - Flux de déclaration d’intervention de l’OI vers les OC présents sur le PM",
-        "description": "Opération permettant à l'OI de créer une intervention chez l’OC",
+        "description": "Opération permettant à l'OI de créer et mettre à jour une intervention chez l’OC",
         "operationId": "declarerInterventionOI",
         "consumes": [
           "application/json",
@@ -500,66 +182,7 @@
         "security": [
           {
             "api_auth": [
-              "write:interventions",
-              "read:interventions"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "intervention"
-        ],
-        "summary": "Flux 2 - Flux de mise à jour d’intervention de l’OI vers les OC présents sur le PM",
-        "description": "Opération permettant à l'OI de mettre à jour une intervention chez l’OC",
-        "operationId": "majInterventionOI",
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Objet intervention à déclarer chez l'OC",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/interventionOI"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation"
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Intervention non trouvée"
-          },
-          "405": {
-            "description": "Validation exception"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "api_auth": [
-              "write:interventions",
-              "read:interventions"
+              "write:interventions"
             ]
           }
         ]
@@ -572,10 +195,8 @@
       "authorizationUrl": "http://serverRoot/oauth/dialog",
       "flow": "implicit",
       "scopes": {
-        "write:clients": "modifier ses clients",
-        "read:clients": "lire ses clients",
-        "write:interventions": "modifier ses interventions",
-        "read:interventions": "lire ses interventions"
+        "write:clients": "Ecrire des infos clients",
+        "write:interventions": "Ecrire des infos interventions"
       }
     }
   },
@@ -584,8 +205,7 @@
       "type": "object",
       "required": [
         "codeOC",
-        "refIntervOI",
-        "tabClientHS"
+        "refIntervOI"
       ],
       "properties": {
         "codeOC": {
@@ -761,48 +381,6 @@
       },
       "xml": {
         "name": "PBO"
-      }
-    },
-    "tabclientHS_OC": {
-      "type": "object",
-      "properties": {
-        "tabInterventionsOI": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/clientHS_OCParInter"
-          }
-        }
-      },
-      "xml": {
-        "name": "tabclientHS_OC"
-      }
-    },
-    "tabInterventionsDO": {
-      "type": "object",
-      "properties": {
-        "tabInterventionsOI": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/interventionDO"
-          }
-        }
-      },
-      "xml": {
-        "name": "tabInterventionsOI"
-      }
-    },
-    "tabInterventionsOI": {
-      "type": "object",
-      "properties": {
-        "tabInterventionsOI": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/interventionOI"
-          }
-        }
-      },
-      "xml": {
-        "name": "tabInterventionsOI"
       }
     }
   },
