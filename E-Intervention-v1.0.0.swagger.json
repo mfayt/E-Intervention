@@ -92,6 +92,10 @@
           "application/json",
           "application/xml"
         ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
         "parameters": [
           {
             "in": "body",
@@ -105,7 +109,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation"
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/refIntervOI"
+            }
           },
           "400": {
             "description": "Bad request"
@@ -143,10 +150,6 @@
         "consumes": [
           "application/json",
           "application/xml"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -381,6 +384,18 @@
       },
       "xml": {
         "name": "PBO"
+      }
+    },
+    "refIntervOI": {
+      "type": "object",
+      "required": [
+        "refIntervOI"
+      ],
+      "properties": {
+        "refIntervOI": {
+          "type": "string",
+          "maxLength": 50
+        }
       }
     }
   },
