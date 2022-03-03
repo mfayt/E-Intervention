@@ -21,14 +21,14 @@
     "https"
   ],
   "paths": {
-    "/clientHS_OC": {
+    "/client_HS_OC": {
       "post": {
         "tags": [
           "client"
         ],
         "summary": "Flux 3 - Flux de déclaration des lignes impactées des OC vers l’OI (facultatif)",
         "description": "Opération permettant à l'opérateur commercial de déclarer des clients HS auprès de l'OI",
-        "operationId": "notifierClientsHS_OC",
+        "operationId": "notifier_Clients_HS_OC",
         "consumes": [
           "application/json",
           "application/xml"
@@ -44,13 +44,16 @@
             "description": "Liste des clients coupés lors d'une intervention donnée pour un opérateur commercial donné",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/clientHS_OCParInter"
+              "$ref": "#/definitions/client_HS_OC_Par_Inter"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful operation"
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/reponse_Client_HS_OC_Par_Inter"
+            }
           },
           "400": {
             "description": "Bad request"
@@ -87,7 +90,7 @@
         ],
         "summary": "Flux 1 - Flux de déclaration d’intervention du DO vers l’OI",
         "description": "Opération permettant au DO de créer et mettre à jour une intervention chez l’OI",
-        "operationId": "declarerInterventionDO",
+        "operationId": "declarer_Intervention_DO",
         "consumes": [
           "application/json",
           "application/xml"
@@ -103,7 +106,7 @@
             "description": "Objet intervention à déclarer chez l'OI",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/interventionDO"
+              "$ref": "#/definitions/intervention_DO"
             }
           }
         ],
@@ -111,7 +114,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/definitions/refIntervOI"
+              "$ref": "#/definitions/reponse_Intervention"
             }
           },
           "400": {
@@ -146,7 +149,7 @@
         ],
         "summary": "Flux 2 - Flux de déclaration d’intervention de l’OI vers les OC présents sur le PM",
         "description": "Opération permettant à l'OI de créer et mettre à jour une intervention chez l’OC",
-        "operationId": "declarerInterventionOI",
+        "operationId": "declarer_Intervention_OI",
         "consumes": [
           "application/json",
           "application/xml"
@@ -158,13 +161,16 @@
             "description": "Objet intervention à déclarer chez l'OC",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/interventionOI"
+              "$ref": "#/definitions/intervention_OI"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successful operation"
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/reponse_Intervention_OI_Vers_OC"
+            }
           },
           "400": {
             "description": "Bad request"
@@ -204,40 +210,43 @@
     }
   },
   "definitions": {
-    "clientHS_OCParInter": {
+    "client_HS_OC_Par_Inter": {
       "type": "object",
       "required": [
-        "codeOC",
-        "refIntervOI"
+        "Code_OC_impacte",
+        "Ref_Interv_OI"
       ],
       "properties": {
-        "codeOC": {
+        "Code_OC_impacte": {
           "type": "string",
-          "maxLength": 4
+          "maxLength": 4,
+          "description": "Code opérateur Interop de celui ayant des clients impactés\n"
         },
-        "refIntervOI": {
+        "Ref_Interv_OI": {
           "type": "string",
-          "maxLength": 50
+          "maxLength": 50,
+          "description": "Référence d’intervention unique produite par l'OI\n"
         },
-        "tabClientHS": {
+        "Liste_Clients_HS": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/clientHSOC"
+            "$ref": "#/definitions/client_HS_OC"
           }
         }
       },
       "xml": {
-        "name": "clientHS_OCParInter"
+        "name": "client_HS_OC_Par_Inter"
       }
     },
-    "clientHSOC": {
+    "client_HS_OC": {
       "type": "object",
+      "description": "Conditionnel : au moins 1 client KO Liste des routes optiques de chaque client HS au PM dont l'heure de coupure est comprise dans l'intervalle\n",
       "required": [
         "PTO",
         "PBO",
-        "tube",
-        "fibre",
-        "positionPM_ModuleOI"
+        "Tube",
+        "Fibre",
+        "Position_PM_Module_OI"
       ],
       "properties": {
         "PTO": {
@@ -248,110 +257,121 @@
           "type": "string",
           "maxLength": 50
         },
-        "tube": {
+        "Tube": {
           "type": "string",
           "maxLength": 50
         },
-        "fibre": {
+        "Fibre": {
           "type": "string",
           "maxLength": 50
         },
-        "positionPM_ModuleOI": {
+        "Position_PM_Module_OI": {
           "type": "string",
           "maxLength": 100
         }
       },
       "xml": {
-        "name": "clientHSOC"
+        "name": "client_HS_OC"
       }
     },
-    "interventionDO": {
+    "intervention_DO": {
       "type": "object",
       "required": [
-        "codeDO",
-        "codeOI",
-        "refIntervDO",
+        "Code_DO",
+        "Code_OI",
+        "Ref_Interv_DO",
         "PM",
-        "tabNaturePBOPTO",
-        "debutInter"
+        "Nature_PBO_PTO",
+        "Debut_Inter"
       ],
       "properties": {
-        "codeDO": {
+        "Code_DO": {
           "type": "string",
-          "maxLength": 4
+          "maxLength": 4,
+          "description": "Code opérateur Interop du donneur d'ordre\n"
         },
-        "codeOI": {
+        "Code_OI": {
           "type": "string",
-          "maxLength": 4
+          "maxLength": 4,
+          "description": "Code opérateur Interop de l'opérateur d'infrastructure\n"
         },
-        "refIntervDO": {
+        "Ref_Interv_DO": {
           "type": "string",
-          "maxLength": 50
+          "maxLength": 50,
+          "description": "Référence d'intervention unique produite par le donneur d'ordre et identique sur M1 et M3\n"
         },
         "PM": {
           "type": "string",
-          "maxLength": 50
+          "maxLength": 50,
+          "description": "Référence réglementaire du PM (ex: FI-XXXXX-XXXX)\n"
         },
-        "tabNaturePBOPTO": {
+        "Nature_PBO_PTO": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/naturePBOPTO"
+            "$ref": "#/definitions/nature_PBO_PTO"
           }
         },
-        "debutInter": {
+        "Debut_Inter": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date/heure de début réel d'intervention\n"
         },
-        "finInter": {
+        "Fin_Inter": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Valeur NULL si M1 Date/heure de fin réel d'intervention si M3\n"
         }
       },
       "xml": {
-        "name": "interventionDO"
+        "name": "intervention_DO"
       }
     },
-    "interventionOI": {
+    "intervention_OI": {
       "type": "object",
       "required": [
-        "codeOI",
-        "refIntervOI",
+        "Code_OI",
+        "Ref_Interv_OI",
         "PM",
-        "debutInter"
+        "Debut_Inter"
       ],
       "properties": {
-        "codeOI": {
+        "Code_OI": {
           "type": "string",
-          "maxLength": 4
+          "maxLength": 4,
+          "description": "Code opérateur Interop de l'opérateur d'infrastructure\n"
         },
-        "refIntervOI": {
+        "Ref_Interv_OI": {
           "type": "string",
-          "maxLength": 50
+          "maxLength": 50,
+          "description": "Référence d’intervention unique produite par l’OI dans R M1/R M3\n"
         },
         "PM": {
           "type": "string",
-          "maxLength": 50
+          "maxLength": 50,
+          "description": "Référence réglementaire du PM (ex: FI-XXXXX-XXXX)\n"
         },
-        "tabPBO": {
+        "PBO": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/PBO"
           }
         },
-        "debutInter": {
+        "Debut_Inter": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date/heure de début réel d'intervention\n"
         },
-        "finInter": {
+        "Fin_Inter": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Valeur NULL si M2 Date/heure de fin réel d'intervention si M4\n"
         }
       },
       "xml": {
-        "name": "interventionOI"
+        "name": "intervention_OI"
       }
     },
-    "naturePBOPTO": {
+    "nature_PBO_PTO": {
       "type": "object",
       "required": [
         "nature"
@@ -359,19 +379,30 @@
       "properties": {
         "nature": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "description": "Nature finale de l'intervention, valeurs possibles : 1 = RACC PTO à construire 2 = RACC PTO existante 3 = RACC hotline 4 = SAV OC 5 = SAV OI 6 = NON FOURNIE (valeur possible permettant de rendre facultatif la fourniture de l'information)\n"
         },
         "PBO": {
           "type": "string",
-          "maxLength": 50
+          "maxLength": 50,
+          "description": "Référence PBO (Ex: PTXXXXXXX) si disponible\n"
         },
         "PTO": {
           "type": "string",
-          "maxLength": 50
+          "maxLength": 50,
+          "description": "Référence PTO (Ex: FI-YYYY-YYYY) si disponible\n"
         }
       },
       "xml": {
-        "name": "naturePBOPTO"
+        "name": "nature_PBO_PTO"
       }
     },
     "PBO": {
@@ -379,22 +410,81 @@
       "properties": {
         "PBO": {
           "type": "string",
-          "maxLength": 50
+          "maxLength": 50,
+          "description": "Référence du PBO (ex: PTXXXXXXX) si fourni par le DO\n"
         }
       },
       "xml": {
         "name": "PBO"
       }
     },
-    "refIntervOI": {
+    "reponse_Client_HS_OC_Par_Inter": {
       "type": "object",
       "required": [
-        "refIntervOI"
+        "Code_Reponse",
+        "Libelle_Reponse"
       ],
       "properties": {
-        "refIntervOI": {
+        "Code_Reponse": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Définition technique à définir en étude SI\n"
+        },
+        "Libelle_Reponse": {
           "type": "string",
-          "maxLength": 50
+          "description": "Définition technique à définir en étude SI\n"
+        }
+      }
+    },
+    "reponse_Intervention": {
+      "type": "object",
+      "required": [
+        "Code_Reponse",
+        "Libelle_Reponse"
+      ],
+      "properties": {
+        "Code_Reponse": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "description": "0 si OK 1 si CHAMPS_NON_RENSEIGNE 2 si MAUVAIS_FORMAT 3 si CODE_OI_INCONNU\n"
+        },
+        "Libelle_Reponse": {
+          "type": "string",
+          "enum": [
+            "OK",
+            "CHAMPS_NON_RENSEIGNE",
+            "MAUVAIS_FORMAT",
+            "CODE_OI_INCONNU"
+          ]
+        },
+        "Ref_Interv_OI": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Conditionnel: si Libelle_Reponse = OK Référence d'intervention unique produite par l'opérateur d'infrastructure\n"
+        }
+      }
+    },
+    "reponse_Intervention_OI_Vers_OC": {
+      "type": "object",
+      "required": [
+        "Code_Reponse",
+        "Libelle_Reponse"
+      ],
+      "properties": {
+        "Code_Reponse": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Définition technique à définir en étude SI\n"
+        },
+        "Libelle_Reponse": {
+          "type": "string",
+          "description": "Définition technique à définir en étude SI\n"
         }
       }
     }
