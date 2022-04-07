@@ -246,7 +246,8 @@
         "PBO",
         "Tube",
         "Fibre",
-        "Position_PM_Module_OI"
+        "Position_PM_Module_OI",
+        "HMS_Coupure"
       ],
       "properties": {
         "PTO": {
@@ -268,7 +269,11 @@
         "Position_PM_Module_OI": {
           "type": "string",
           "maxLength": 100
-        }
+        },
+        "HMS_Coupure": {
+          "type": "string",
+          "format": "date-time"
+        },
       },
       "xml": {
         "name": "client_HS_OC"
