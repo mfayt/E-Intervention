@@ -21,7 +21,7 @@
     "https"
   ],
   "paths": {
-    "/client_HS_OC": {
+    "/client_HS_OC_Par_Inter": {
       "post": {
         "tags": [
           "client"
@@ -114,7 +114,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/definitions/reponse_Intervention"
+              "$ref": "#/definitions/reponse_Intervention_DO"
             }
           },
           "400": {
@@ -169,7 +169,7 @@
           "200": {
             "description": "Successful operation",
             "schema": {
-              "$ref": "#/definitions/reponse_Intervention_OI_Vers_OC"
+              "$ref": "#/definitions/reponse_Intervention_OI"
             }
           },
           "400": {
@@ -273,7 +273,7 @@
         "HMS_Coupure": {
           "type": "string",
           "format": "date-time"
-        },
+        }
       },
       "xml": {
         "name": "client_HS_OC"
@@ -433,15 +433,62 @@
         "Code_Reponse": {
           "type": "integer",
           "format": "int32",
-          "description": "Définition technique à définir en étude SI\n"
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "description": "0 si OK 1 si CHAMPS_NON_RENSEIGNE 2 si MAUVAIS_FORMAT 3 si REF_INTERV_OI_INCONNUE\n"
         },
         "Libelle_Reponse": {
           "type": "string",
-          "description": "Définition technique à définir en étude SI\n"
+          "enum": [
+            "OK",
+            "CHAMPS_NON_RENSEIGNE",
+            "MAUVAIS_FORMAT",
+            "REF_INTERV_OI_INCONNUE"
+          ]
         }
       }
     },
-    "reponse_Intervention": {
+    "reponse_Intervention_DO": {
+      "type": "object",
+      "required": [
+        "Code_Reponse",
+        "Libelle_Reponse"
+      ],
+      "properties": {
+        "Code_Reponse": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "description": "0 si OK 1 si CHAMPS_NON_RENSEIGNE 2 si MAUVAIS_FORMAT 3 si CODE_OI_INCONNU 4 si PM_INCONNU\n"
+        },
+        "Libelle_Reponse": {
+          "type": "string",
+          "enum": [
+            "OK",
+            "CHAMPS_NON_RENSEIGNE",
+            "MAUVAIS_FORMAT",
+            "CODE_OI_INCONNU",
+            "PM_INCONNU"
+          ]
+        },
+        "Ref_Interv_OI": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Conditionnel: si Libelle_Reponse = OK Référence d'intervention unique produite par l'opérateur d'infrastructure\n"
+        }
+      }
+    },
+    "reponse_Intervention_OI": {
       "type": "object",
       "required": [
         "Code_Reponse",
@@ -457,7 +504,7 @@
             2,
             3
           ],
-          "description": "0 si OK 1 si CHAMPS_NON_RENSEIGNE 2 si MAUVAIS_FORMAT 3 si CODE_OI_INCONNU\n"
+          "description": "0 si OK 1 si CHAMPS_NON_RENSEIGNE 2 si MAUVAIS_FORMAT 3 si CODE_OI_INCONNU 4 si PM_INCONNU\n"
         },
         "Libelle_Reponse": {
           "type": "string",
@@ -465,31 +512,9 @@
             "OK",
             "CHAMPS_NON_RENSEIGNE",
             "MAUVAIS_FORMAT",
-            "CODE_OI_INCONNU"
+            "CODE_OI_INCONNU",
+            "PM_INCONNU"
           ]
-        },
-        "Ref_Interv_OI": {
-          "type": "string",
-          "maxLength": 50,
-          "description": "Conditionnel: si Libelle_Reponse = OK Référence d'intervention unique produite par l'opérateur d'infrastructure\n"
-        }
-      }
-    },
-    "reponse_Intervention_OI_Vers_OC": {
-      "type": "object",
-      "required": [
-        "Code_Reponse",
-        "Libelle_Reponse"
-      ],
-      "properties": {
-        "Code_Reponse": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Définition technique à définir en étude SI\n"
-        },
-        "Libelle_Reponse": {
-          "type": "string",
-          "description": "Définition technique à définir en étude SI\n"
         }
       }
     }
