@@ -272,7 +272,8 @@
         },
         "HMS_Coupure": {
           "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date/heure de début de coupure pour le client (format selon la norme ISO 8601) \n"
         }
       },
       "xml": {
@@ -319,12 +320,12 @@
         "Debut_Inter": {
           "type": "string",
           "format": "date-time",
-          "description": "Date/heure de début réel d'intervention\n"
+          "description": "Date/heure de début réel d'intervention (format selon la norme ISO 8601)\n"
         },
         "Fin_Inter": {
           "type": "string",
           "format": "date-time",
-          "description": "Valeur NULL si M1 Date/heure de fin réel d'intervention si M3\n"
+          "description": "Valeur NULL si M1 Date/heure de fin réel d'intervention si M3 (format selon la norme ISO 8601)\n"
         }
       },
       "xml": {
@@ -364,12 +365,12 @@
         "Debut_Inter": {
           "type": "string",
           "format": "date-time",
-          "description": "Date/heure de début réel d'intervention\n"
+          "description": "Date/heure de début réel d'intervention (format selon la norme ISO 8601)\n"
         },
         "Fin_Inter": {
           "type": "string",
           "format": "date-time",
-          "description": "Valeur NULL si M2 Date/heure de fin réel d'intervention si M4\n"
+          "description": "Valeur NULL si M2 Date/heure de fin réel d'intervention si M4 (format selon la norme ISO 8601)\n"
         }
       },
       "xml": {
